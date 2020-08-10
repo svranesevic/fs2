@@ -683,7 +683,7 @@ final class Stream[+F[_], +O] private[fs2] (private val free: FreeC[F, O, Unit])
     * resulting rate can't exceed the output rate of `this` stream.
     */
   def metered[F2[x] >: F[x]: Timer](rate: FiniteDuration): Stream[F2, O] =
-    Stream.fixedRate[F2](rate).zipRight(this)
+    (Stream.emit(()) ++ Stream.fixedRate[F2](rate)).zipRight(this)
 
   /**
     * Logs the elements of this stream as they are pulled.
